@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vlsh — The Hackable Unix Shell</title>
+  <meta name="description" content="vlsh is a fast, modern, hackable Unix shell written in V. Pipes, history, tab completion, plugins, and a built-in terminal multiplexer." />
+  <meta name="theme-color" content="#0d1117" />
+  <link rel="canonical" href="https://vlsh.cc/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vlsh.cc/" />
+  <meta property="og:title" content="vlsh — The Hackable Unix Shell" />
+  <meta property="og:description" content="A fast, modern, hackable Unix shell written in V. Drop .v plugins, customize prompts, and split panes in the built-in multiplexer." />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo" style="text-decoration:none;">
+    <span class="prompt">~$</span> vlsh
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#plugins">Plugins</a></li>
+    <li>
+      <a href="https://github.com/vlshcc/vlsh" class="btn-github" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+            -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+            .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+            -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09
+            2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82
+            2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
+            2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <circle cx="5" cy="5" r="5" fill="#3fb950"/>
+      </svg>
+      Written in V &mdash; MIT Licensed
+    </div>
+    <h1>The <span class="highlight">hackable</span><br>Unix shell</h1>
+    <p>vlsh is a fast, modern shell built for developers who want to read, modify, and extend their shell — not just use it.</p>
+    <div class="hero-actions">
+      <a href="#install" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M7.47 10.78a.75.75 0 0 0 1.06 0l3.75-3.75a.75.75 0 0 0-1.06-1.06L8.75 8.44V1.75a.75.75 0 0 0-1.5 0v6.69L4.78 5.97a.75.75 0 0 0-1.06 1.06l3.75 3.75ZM3.75 13a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z"/>
+        </svg>
+        Get Started
+      </a>
+      <a href="https://github.com/vlshcc/vlsh" class="btn-secondary" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+            -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+            .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+            -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09
+            2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82
+            2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
+            2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
+
+  <!-- Terminal demo -->
+  <div class="terminal-wrapper">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">vlsh &mdash; ~</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">ls</span> <span class="t-arg">*.v</span></div>
+        <div class="t-line"><span class="t-out">main.v&nbsp; parser.v&nbsp; lexer.v&nbsp; shell.v</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">cat</span> <span class="t-arg">parser.v</span> <span class="t-cmd">|</span> <span class="t-cmd">grep</span> <span class="t-arg">fn</span> <span class="t-cmd">|</span> <span class="t-cmd">wc</span> <span class="t-arg">-l</span></div>
+        <div class="t-line"><span class="t-out">42</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">v</span> <span class="t-arg">.</span> <span class="t-cmd">&amp;&amp;</span> <span class="t-cmd">./myapp</span></div>
+        <div class="t-line"><span class="t-ok">Build successful.</span></div>
+        <div class="t-line"><span class="t-out">Running myapp v0.1.0...</span></div>
+        <div class="t-line">&nbsp;</div>
+        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Everything you need, nothing you don't</h2>
+    <p class="section-desc">vlsh ships with the fundamentals done right, then gets out of your way.</p>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast &amp; Compiled</h3>
+        <p>Built with V, vlsh compiles to a lean native binary. Cold start is near-instant — no interpreter overhead on every keystroke.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">|</div>
+        <h3>Pipes, Redirection &amp; Chains</h3>
+        <p>First-class support for <code>|</code> pipes, <code>&gt;</code> / <code>&gt;&gt;</code> redirection, and <code>&amp;&amp;</code> command chaining. Glob expansion, tilde expansion, and <code>$VAR</code> substitution all work as expected.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F4AC;</div>
+        <h3>Smart History</h3>
+        <p>Persistent command history across sessions (up to 5 000 entries). Press <kbd>Ctrl+R</kbd> for incremental search through every command you've run.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x21E5;</div>
+        <h3>Tab Completion</h3>
+        <p>File and directory completion out of the box. Plugins can register custom completions for commands, flags, and any domain-specific vocabulary.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F50C;</div>
+        <h3>Plugin System</h3>
+        <p>Drop a <code>.v</code> file into <code>~/.vlsh/plugins/</code>. vlsh compiles and loads it automatically — no restart required. Plugins can add commands, decorate the prompt, and provide completions.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x2397;</div>
+        <h3>Built-in Multiplexer</h3>
+        <p>Split panes horizontally or vertically with <kbd>Ctrl+V</kbd> prefix bindings. Mouse support and 1 000-line scrollback per pane — no tmux dependency needed.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F4DC;</div>
+        <h3>Native .vsh Scripts</h3>
+        <p>Run <code>.vsh</code> V scripts directly without manually compiling them first. Great for automation that needs performance without the ceremony of a full build.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x1F3A8;</div>
+        <h3>Theming &amp; Aliases</h3>
+        <p>Configure prompt colors via RGB values in <code>~/.vlshrc</code>. Manage aliases at runtime or persist them in your config — all without restarting the shell.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="container">
+    <p class="section-label">Installation</p>
+    <h2 class="section-title">Get up and running</h2>
+    <p class="section-desc">Pre-built packages for Linux, or build from source in seconds.</p>
+
+    <div class="install-tabs">
+      <button class="tab-btn active" onclick="showTab(event, 'tab-deb')">Debian / Ubuntu</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-bin')">Binary</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-src')">From Source</button>
+    </div>
+
+    <!-- Debian / Ubuntu -->
+    <div id="tab-deb" class="tab-pane active">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>shell</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><span class="c"># Download the latest .deb package from the releases page</span>
+wget https://github.com/vlshcc/vlsh/releases/latest/download/vlsh_linux_amd64.deb
+
+<span class="c"># Install</span>
+sudo dpkg -i vlsh_linux_amd64.deb
+
+<span class="c"># Add to valid login shells and set as default (optional)</span>
+echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/vlsh</pre>
+      </div>
+    </div>
+
+    <!-- Binary -->
+    <div id="tab-bin" class="tab-pane">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>shell</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><span class="c"># Download the standalone binary (64-bit Linux)</span>
+wget https://github.com/vlshcc/vlsh/releases/latest/download/vlsh_linux_amd64
+chmod +x vlsh_linux_amd64
+sudo mv vlsh_linux_amd64 /usr/local/bin/vlsh
+
+<span class="c"># Add to valid login shells and set as default (optional)</span>
+echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/vlsh</pre>
+      </div>
+    </div>
+
+    <!-- From Source -->
+    <div id="tab-src" class="tab-pane">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>shell</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><span class="c"># Requires V — https://vlang.io</span>
+git clone https://github.com/vlshcc/vlsh
+<span class="kw">cd</span> vlsh
+v <span class="p">.</span>
+sudo mv vlsh /usr/local/bin/vlsh
+
+<span class="c"># Add to valid login shells and set as default (optional)</span>
+echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/vlsh</pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PLUGINS -->
+<section id="plugins">
+  <div class="container">
+    <p class="section-label">Plugins</p>
+    <h2 class="section-title">Extend with pure V</h2>
+
+    <div class="plugin-grid">
+      <div>
+        <p class="plugin-desc">
+          The plugin system is the heart of vlsh's hackability. Any <code>.v</code> file you drop into <code>~/.vlsh/plugins/</code> is automatically compiled and loaded on the next shell start. Plugins can:
+        </p>
+        <ul class="plugin-steps">
+          <li>
+            <span class="step-num">1</span>
+            Register new built-in commands available everywhere in the shell
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            Decorate the prompt — e.g. show the current git branch
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            Provide tab-completions for any command or flag
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            Interact with the shell environment (aliases, paths, venv vars)
+          </li>
+        </ul>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>~/.vlsh/plugins/git_branch.v</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><span class="c">// Show the current git branch in the prompt</span>
+<span class="kw">module</span> plugins
+
+<span class="kw">import</span> os
+
+<span class="kw">pub fn</span> prompt_suffix() string {
+    branch := os.execute(<span class="s">'git branch --show-current'</span>)
+    <span class="kw">if</span> branch.exit_code != <span class="p">0</span> {
+        <span class="kw">return</span> <span class="s">''</span>
+    }
+    <span class="kw">return</span> <span class="s">' (\e[35m'</span> + branch.output.trim_space() + <span class="s">'\e[0m)'</span>
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <strong>vlsh</strong> &mdash; the hackable Unix shell
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/vlshcc/vlsh" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://github.com/vlshcc/vlsh/releases" target="_blank" rel="noopener">Releases</a></li>
+      <li><a href="https://github.com/vlshcc/vlsh/issues" target="_blank" rel="noopener">Issues</a></li>
+      <li><a href="https://vlang.io" target="_blank" rel="noopener">V Language</a></li>
+    </ul>
+    <p class="footer-copy">MIT License &mdash; Created by David Satime Wallin. Original work by onyxcode.</p>
+  </div>
+</footer>
+
+<script>
+  function showTab(e, id) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    e.target.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 1800);
+    });
+  }
+</script>
+
+</body>
+</html>
