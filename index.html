@@ -89,20 +89,18 @@
         <span class="terminal-title">vlsh &mdash; ~</span>
       </div>
       <div class="terminal-body">
-        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">cat</span> <span class="t-arg">deploy.vsh</span></div>
-        <div class="t-line"><span class="t-comment">#!/usr/bin/env vlsh</span></div>
-        <div class="t-line"><span class="t-comment">// .vsh scripts run natively — no compile step needed</span></div>
-        <div class="t-line"><span class="t-purple">import</span> <span class="t-out">os</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">remote</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;git&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Show git branch &amp; commit in prompt</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;ssh_hosts&nbsp;&nbsp;SSH hostname tab-completion</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;v_man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V module docs as man pages</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;git_mood&nbsp;&nbsp;&nbsp;Git mood tracking</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-purple">fn</span> <span class="t-ok">main</span><span class="t-out">() {</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;files</span> <span class="t-out">:=</span> <span class="t-out">os.glob(</span><span class="t-str">'build/*.js'</span><span class="t-out">)</span> <span class="t-comment">or { [] }</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;</span><span class="t-purple">for</span> <span class="t-out">f</span> <span class="t-purple">in</span> <span class="t-out">files {</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;os.cp(f,</span> <span class="t-str">'dist/'</span> <span class="t-out">+ os.base(f))</span> <span class="t-comment">or { panic(err) }</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;}</span></div>
-        <div class="t-line"><span class="t-out">}</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">install git</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;Downloading git.v...</span> <span class="t-ok">done</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;Run "plugins reload" to activate.</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">./deploy.vsh</span></div>
-        <div class="t-line"><span class="t-ok">Copied 3 files to dist/</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">reload</span></div>
+        <div class="t-line"><span class="t-ok">&nbsp;&nbsp;Compiled 1 plugin(s).</span></div>
         <div class="t-line">&nbsp;</div>
         <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cursor"></span></div>
       </div>
@@ -146,7 +144,7 @@
       <div class="feature-card">
         <div class="feature-icon">&#x1F50C;</div>
         <h3>Plugin System</h3>
-        <p>Drop a <code>.v</code> file into <code>~/.vlsh/plugins/</code>. vlsh compiles and loads it automatically — no restart required. Plugins can add commands, decorate the prompt, and provide completions.</p>
+        <p>Install community plugins from the remote repository with <code>plugins install &lt;name&gt;</code>, or drop any <code>.v</code> file into <code>~/.vlsh/plugins/</code>. Plugins can add commands, decorate the prompt, run hooks, and provide completions.</p>
       </div>
 
       <div class="feature-card">
@@ -252,7 +250,7 @@ chsh -s /usr/local/bin/vlsh</pre>
     <div class="plugin-grid">
       <div>
         <p class="plugin-desc">
-          The plugin system is the heart of vlsh's hackability. Any <code>.v</code> file you drop into <code>~/.vlsh/plugins/</code> is automatically compiled and loaded on the next shell start. Plugins can:
+          The plugin system is the heart of vlsh's hackability. Install community plugins from the remote repository with a single command, or drop any <code>.v</code> file into <code>~/.vlsh/plugins/</code> to build your own. Plugins can:
         </p>
         <ul class="plugin-steps">
           <li>
@@ -261,7 +259,7 @@ chsh -s /usr/local/bin/vlsh</pre>
           </li>
           <li>
             <span class="step-num">2</span>
-            Decorate the prompt — e.g. show the current git branch
+            Decorate the prompt — e.g. show the current git branch and commit
           </li>
           <li>
             <span class="step-num">3</span>
@@ -269,30 +267,108 @@ chsh -s /usr/local/bin/vlsh</pre>
           </li>
           <li>
             <span class="step-num">4</span>
-            Interact with the shell environment (aliases, paths, venv vars)
+            Run pre/post hooks before and after every command
+          </li>
+          <li>
+            <span class="step-num">5</span>
+            Be installed from the community repo with <code>plugins install</code>
           </li>
         </ul>
       </div>
 
       <div class="code-block">
         <div class="code-block-header">
-          <span>~/.vlsh/plugins/git_branch.v</span>
+          <span>~/.vlsh/plugins/myplugin.v</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c">// Show the current git branch in the prompt</span>
-<span class="kw">module</span> plugins
+        <pre><span class="c">// Plugins implement main() and respond to argument tokens</span>
+<span class="kw">module</span> main
 
 <span class="kw">import</span> os
 
-<span class="kw">pub fn</span> prompt_suffix() string {
-    branch := os.execute(<span class="s">'git branch --show-current'</span>)
-    <span class="kw">if</span> branch.exit_code != <span class="p">0</span> {
-        <span class="kw">return</span> <span class="s">''</span>
+<span class="kw">fn</span> main() {
+    arg := <span class="kw">if</span> os.args.len > <span class="p">1</span> { os.args[<span class="p">1</span>] } <span class="kw">else</span> { <span class="s">''</span> }
+    <span class="kw">match</span> arg {
+        <span class="s">'capabilities'</span> { println(<span class="s">'prompt'</span>) }
+        <span class="s">'prompt'</span> {
+            branch := os.execute(<span class="s">'git branch --show-current'</span>)
+            <span class="kw">if</span> branch.exit_code == <span class="p">0</span> {
+                print(<span class="s">' ('</span> + branch.output.trim_space() + <span class="s">')'</span>)
+            }
+        }
+        <span class="kw">else</span> {}
     }
-    <span class="kw">return</span> <span class="s">' (\e[35m'</span> + branch.output.trim_space() + <span class="s">'\e[0m)'</span>
 }</pre>
       </div>
     </div>
+
+    <!-- Community plugins -->
+    <div class="plugin-available">
+      <h3 class="subsection-title">Community plugins</h3>
+      <div class="plugin-avail-grid">
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">git</span>
+            <span class="plugin-avail-tag">prompt</span>
+          </div>
+          <p class="plugin-avail-desc">Shows the current branch and short commit hash in your prompt with configurable RGB colours.</p>
+        </a>
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">ssh_hosts</span>
+            <span class="plugin-avail-tag">completion</span>
+          </div>
+          <p class="plugin-avail-desc">Tab-completes SSH hostnames from <code>~/.ssh/config</code> and <code>known_hosts</code>.</p>
+        </a>
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">v_man</span>
+            <span class="plugin-avail-tag">command</span>
+          </div>
+          <p class="plugin-avail-desc">Browse V standard library docs in the terminal, fetched live from <code>modules.vlang.io</code>.</p>
+        </a>
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">git_mood</span>
+            <span class="plugin-avail-tag">command</span>
+          </div>
+          <p class="plugin-avail-desc">Tracks your emotional state across git commits to see how mood correlates with code quality.</p>
+        </a>
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">hello_plugin</span>
+            <span class="plugin-avail-tag">template</span>
+          </div>
+          <p class="plugin-avail-desc">A minimal, commented template — the perfect starting point for writing your first plugin.</p>
+        </a>
+      </div>
+      <p class="plugin-repo-link">
+        Browse the full catalogue and contribute at <a href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">github.com/vlshcc/plugins</a>
+      </p>
+    </div>
+
+    <!-- Plugin management commands -->
+    <div class="plugin-cmds">
+      <h3 class="subsection-title">Plugin management</h3>
+      <div class="cmd-table-wrap">
+        <table class="cmd-table">
+          <thead>
+            <tr><th>Command</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>plugins list</code></td><td>Show all locally installed plugins</td></tr>
+            <tr><td><code>plugins remote</code></td><td>List plugins available in the remote repository</td></tr>
+            <tr><td><code>plugins remote search &lt;query&gt;</code></td><td>Filter remote plugins by name</td></tr>
+            <tr><td><code>plugins install &lt;name&gt;</code></td><td>Download and install a plugin from the remote repo</td></tr>
+            <tr><td><code>plugins reload</code></td><td>Recompile and reload all plugins (run after install)</td></tr>
+            <tr><td><code>plugins enable / disable &lt;name&gt;</code></td><td>Activate or deactivate a plugin without deleting it</td></tr>
+            <tr><td><code>plugins enable / disable all</code></td><td>Activate or deactivate all plugins at once</td></tr>
+            <tr><td><code>plugins delete &lt;name&gt;</code></td><td>Remove an installed plugin entirely</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </section>
 
