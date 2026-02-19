@@ -89,17 +89,22 @@
         <span class="terminal-title">vlsh &mdash; ~</span>
       </div>
       <div class="terminal-body">
-        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">ls</span> <span class="t-arg">*.v</span></div>
-        <div class="t-line"><span class="t-out">main.v&nbsp; parser.v&nbsp; lexer.v&nbsp; shell.v</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">cat</span> <span class="t-arg">deploy.vsh</span></div>
+        <div class="t-line"><span class="t-comment">#!/usr/bin/env vlsh</span></div>
+        <div class="t-line"><span class="t-comment">// .vsh scripts run natively — no compile step needed</span></div>
+        <div class="t-line"><span class="t-purple">import</span> <span class="t-out">os</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">cat</span> <span class="t-arg">parser.v</span> <span class="t-cmd">|</span> <span class="t-cmd">grep</span> <span class="t-arg">fn</span> <span class="t-cmd">|</span> <span class="t-cmd">wc</span> <span class="t-arg">-l</span></div>
-        <div class="t-line"><span class="t-out">42</span></div>
+        <div class="t-line"><span class="t-purple">fn</span> <span class="t-ok">main</span><span class="t-out">() {</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;files</span> <span class="t-out">:=</span> <span class="t-out">os.glob(</span><span class="t-str">'build/*.js'</span><span class="t-out">)</span> <span class="t-comment">or { [] }</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;</span><span class="t-purple">for</span> <span class="t-out">f</span> <span class="t-purple">in</span> <span class="t-out">files {</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;os.cp(f,</span> <span class="t-str">'dist/'</span> <span class="t-out">+ os.base(f))</span> <span class="t-comment">or { panic(err) }</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;}</span></div>
+        <div class="t-line"><span class="t-out">}</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cmd">v</span> <span class="t-arg">.</span> <span class="t-cmd">&amp;&amp;</span> <span class="t-cmd">./myapp</span></div>
-        <div class="t-line"><span class="t-ok">Build successful.</span></div>
-        <div class="t-line"><span class="t-out">Running myapp v0.1.0...</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">./deploy.vsh</span></div>
+        <div class="t-line"><span class="t-ok">Copied 3 files to dist/</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~/projects$</span> <span class="t-cursor"></span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cursor"></span></div>
       </div>
     </div>
   </div>
