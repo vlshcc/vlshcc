@@ -262,6 +262,7 @@ nav {
 .t-comment { color: #484f58; }
 .t-ok      { color: var(--green); }
 .t-warn    { color: var(--yellow); }
+.t-ghost   { color: #6e7681; }
 .t-purple  { color: var(--purple); }
 .t-str     { color: var(--yellow); }
 .t-cursor  {

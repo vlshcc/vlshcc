@@ -95,18 +95,15 @@
         <span class="terminal-title">vlsh &mdash; ~</span>
       </div>
       <div class="terminal-body">
-        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">remote</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;git&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v1.1.0&nbsp;&nbsp;Show git branch &amp; commit in prompt</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;ssh_hosts&nbsp;&nbsp;v1.0.2&nbsp;&nbsp;SSH hostname tab-completion&nbsp;&nbsp;<span class="t-warn">[installed v1.0.1, update available: v1.0.2]</span></span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;v_man&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v1.0.0&nbsp;&nbsp;V module docs as man pages</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;git_mood&nbsp;&nbsp;&nbsp;v1.0.1&nbsp;&nbsp;Git mood tracking</span></div>
+        <div class="t-line"><span class="t-comment">&nbsp;&nbsp;# inline autosuggestion from history</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">git push</span><span class="t-cursor"></span><span class="t-ghost"> origin main</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">install git</span></div>
-        <div class="t-line"><span class="t-ok">&nbsp;&nbsp;Installed git v1.1.0.</span></div>
-        <div class="t-line"><span class="t-out">&nbsp;&nbsp;Run "plugins reload" to activate.</span></div>
+        <div class="t-line"><span class="t-comment">&nbsp;&nbsp;# press → or End to accept</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">git push origin main</span></div>
+        <div class="t-line"><span class="t-out">&nbsp;&nbsp;Everything up-to-date.</span></div>
         <div class="t-line">&nbsp;</div>
-        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">plugins</span> <span class="t-arg">reload</span></div>
-        <div class="t-line"><span class="t-ok">&nbsp;&nbsp;Compiled 1 plugin(s).</span></div>
+        <div class="t-line"><span class="t-comment">&nbsp;&nbsp;# tab completion works after trailing /</span></div>
+        <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cmd">cd .config/</span><span class="t-arg">nvim</span></div>
         <div class="t-line">&nbsp;</div>
         <div class="t-line"><span class="t-prompt">~$</span> <span class="t-cursor"></span></div>
       </div>
@@ -144,7 +141,13 @@
       <div class="feature-card">
         <div class="feature-icon">&#x21E5;</div>
         <h3>Tab Completion</h3>
-        <p>File and directory completion out of the box. Plugins can register custom completions for commands, flags, and any domain-specific vocabulary.</p>
+        <p>File and directory completion out of the box, including paths after a trailing <code>/</code> in subdirectories. Plugins can register custom completions for commands, flags, and any domain-specific vocabulary.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">&#x2192;</div>
+        <h3>Inline Autosuggestions</h3>
+        <p>Fish-style ghost text appears as you type, sourced from command history. Press <kbd>→</kbd> or <kbd>End</kbd> to accept the suggestion. Includes path validation for <code>cd</code> candidates and a filesystem fallback.</p>
       </div>
 
       <div class="feature-card">
