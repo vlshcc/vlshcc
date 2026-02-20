@@ -25,6 +25,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
+    <li><a href="#posix">POSIX</a></li>
     <li><a href="#install">Install</a></li>
     <li><a href="#plugins">Plugins</a></li>
     <li>
@@ -129,7 +130,7 @@
       <div class="feature-card">
         <div class="feature-icon">|</div>
         <h3>Pipes, Redirection &amp; Chains</h3>
-        <p>First-class support for <code>|</code> pipes, <code>&gt;</code> / <code>&gt;&gt;</code> redirection, and <code>&amp;&amp;</code> command chaining. Glob expansion, tilde expansion, and <code>$VAR</code> substitution all work as expected.</p>
+        <p>Full pipeline support with <code>|</code> pipes, <code>&lt;</code> / <code>&gt;</code> / <code>&gt;&gt;</code> redirection, and <code>&amp;&amp;</code> / <code>||</code> / <code>;</code> command chaining. Glob expansion, tilde expansion, and <code>$VAR</code> substitution all work as expected.</p>
       </div>
 
       <div class="feature-card">
@@ -174,6 +175,54 @@
         <p>Configure prompt colors via RGB values in <code>~/.vlshrc</code>. Manage aliases at runtime or persist them in your config — all without restarting the shell.</p>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- POSIX -->
+<section id="posix">
+  <div class="container">
+    <p class="section-label">POSIX</p>
+    <h2 class="section-title">POSIX compatibility</h2>
+    <p class="section-desc">vlsh is not a POSIX-conformant shell, but it supports the commonly-used subset of POSIX features so that everyday scripts and muscle memory just work.</p>
+
+    <div class="posix-grid">
+      <div>
+        <h3 class="subsection-title">Supported operators</h3>
+        <div class="cmd-table-wrap">
+          <table class="cmd-table">
+            <thead>
+              <tr><th>Operator</th><th>Behaviour</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>&amp;&amp;</code></td><td>Run next command only on success</td></tr>
+              <tr><td><code>||</code></td><td>Run next command only on failure</td></tr>
+              <tr><td><code>;</code></td><td>Run next command unconditionally</td></tr>
+              <tr><td><code>&lt;</code></td><td>Redirect stdin from a file</td></tr>
+              <tr><td><code>&gt;</code></td><td>Redirect stdout, overwriting the file</td></tr>
+              <tr><td><code>&gt;&gt;</code></td><td>Redirect stdout, appending to the file</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="subsection-title">Supported builtins</h3>
+        <div class="cmd-table-wrap">
+          <table class="cmd-table">
+            <thead>
+              <tr><th>Builtin</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>export</code> / <code>unset</code></td><td>Set or remove environment variables</td></tr>
+              <tr><td><code>source</code> / <code>.</code></td><td>Execute a script in the current shell context</td></tr>
+              <tr><td><code>cd</code></td><td>Change directory; supports <code>~</code>, <code>$HOME</code>, and <code>cd -</code></td></tr>
+              <tr><td><code>exit</code></td><td>Exit the shell with an optional status code</td></tr>
+              <tr><td><code>$?</code></td><td>Expands to the exit status of the last command</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </section>
