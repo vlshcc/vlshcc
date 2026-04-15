@@ -385,6 +385,7 @@ section {
 
 .install-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
   margin-bottom: 1.25rem;
   border-bottom: 1px solid var(--border);
@@ -693,6 +694,15 @@ footer {
   font-size: 0.8125rem;
   color: var(--text-muted);
   margin-top: 0.5rem;
+}
+
+.footer-disclaimer {
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 0.75rem;
+  max-width: 42rem;
 }
 
 /* RESPONSIVE */

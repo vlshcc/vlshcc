@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vlsh — The Hackable Unix Shell</title>
-  <meta name="description" content="vlsh is a fast, modern, hackable Unix shell written in V. Pipes, history, tab completion, plugins, and a built-in terminal multiplexer." />
+  <meta name="description" content="vlsh is an interactive Unix shell written in V — simple, fast, and hackable. Pipes, redirection, POSIX-style expansion, history, tab completion, plugins, and a built-in terminal multiplexer." />
   <meta name="theme-color" content="#0d1117" />
   <link rel="canonical" href="https://vlsh.cc/" />
 
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vlsh.cc/" />
   <meta property="og:title" content="vlsh — The Hackable Unix Shell" />
-  <meta property="og:description" content="A fast, modern, hackable Unix shell written in V. Install versioned plugins, customize prompts, and split panes in the built-in multiplexer." />
+  <meta property="og:description" content="An interactive Unix shell written in V — simple, fast, hackable. Plugins, mux, inline autosuggestions, and a growing POSIX-style subset." />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -64,7 +64,7 @@
       </div>
     </div>
     <h1>The <span class="highlight">hackable</span><br>Unix shell</h1>
-    <p>vlsh is a fast, modern shell built for developers who want to read, modify, and extend their shell — not just use it.</p>
+    <p>vlsh is an interactive Unix shell written in <a href="https://vlang.io" target="_blank" rel="noopener">V</a> — simple, fast, and hackable, with a clean codebase you can read, modify, and extend.</p>
     <div class="hero-actions">
       <a href="#install" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -138,19 +138,19 @@
       <div class="feature-card">
         <div class="feature-icon">|</div>
         <h3>Pipes, Redirection &amp; Chains</h3>
-        <p>Full pipeline support with <code>|</code> pipes, <code>&lt;</code> / <code>&gt;</code> / <code>&gt;&gt;</code> redirection, and <code>&amp;&amp;</code> / <code>||</code> / <code>;</code> command chaining. Glob expansion, tilde expansion, and <code>$VAR</code> substitution all work as expected.</p>
+        <p>Pipelines (<code>|</code>), file redirection (<code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>), and <code>2&gt;&amp;1</code> when stdout is captured — plus <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code>. Glob expansion (<code>*.v</code>, <code>~/docs/**</code>), tilde expansion, and parameter expansion (<code>$VAR</code>, <code>${…}</code>) with session <code>IFS</code> for word splitting.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">&#x1F4AC;</div>
         <h3>Smart History</h3>
-        <p>Persistent command history across sessions (up to 5 000 entries). Press <kbd>Ctrl+R</kbd> for incremental search through every command you've run.</p>
+        <p>Shared history file (<code>~/.vlsh_history</code>, last 5 000 entries), arrow keys, and <kbd>Ctrl+R</kbd> search. Bash-style history expansion at the interactive prompt: <code>!!</code>, <code>!$</code>, <code>!n</code>, <code>!-n</code>, <code>!prefix</code>, and <code>!?sub</code>.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">&#x21E5;</div>
         <h3>Tab Completion</h3>
-        <p>File and directory completion out of the box, including paths after a trailing <code>/</code> in subdirectories. Plugins can register custom completions for commands, flags, and any domain-specific vocabulary.</p>
+        <p>Files and directories; the first word also completes command names from <code>$PATH</code>. After <code>cd </code>, only directories are suggested. Plugins can register custom completions (for example SSH hostnames).</p>
       </div>
 
       <div class="feature-card">
@@ -162,13 +162,13 @@
       <div class="feature-card">
         <div class="feature-icon">&#x1F50C;</div>
         <h3>Plugin System</h3>
-        <p>Install community plugins from the remote repository with <code>plugins install &lt;name&gt;</code> and keep them up to date with <code>plugins update</code>. Plugins can add commands, decorate the prompt, run hooks, and provide completions.</p>
+        <p>Install from the official repo with <code>plugins install</code>, <code>plugins search</code>, <code>plugins update</code>, <code>plugins delete</code>, or <code>plugins reinstall</code>. Plugins can add commands, prompt lines, pre/post hooks, <code>output_hook</code>, tab completions, <code>mux_status</code> for the multiplexer bar, and help text surfaced via <code>help</code>.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">&#x2397;</div>
         <h3>Built-in Multiplexer</h3>
-        <p>Split panes horizontally or vertically with <kbd>Ctrl+V</kbd> prefix bindings. Mouse support and 1 000-line scrollback per pane — no tmux dependency needed.</p>
+        <p>Run <code>mux</code> to split panes (resizable), use the mouse, copy/paste, a status bar, and up to 1 000 lines of scrollback per pane — VT100-friendly so editors like <code>vim</code> and <code>nano</code> work inside panes.</p>
       </div>
 
       <div class="feature-card">
@@ -192,7 +192,7 @@
   <div class="container">
     <p class="section-label">POSIX</p>
     <h2 class="section-title">POSIX compatibility</h2>
-    <p class="section-desc">vlsh is not a POSIX-conformant shell, but it supports the commonly-used subset of POSIX features so that everyday scripts and muscle memory just work.</p>
+    <p class="section-desc">vlsh is not POSIX-conformant, but it supports commonly used POSIX shell features — with a documented, tested subset growing over time (see <a href="https://github.com/vlshcc/vlsh/blob/main/docs/posix-inventory.md" target="_blank" rel="noopener">posix-inventory.md</a> on GitHub).</p>
 
     <div class="posix-grid">
       <div>
@@ -209,6 +209,7 @@
               <tr><td><code>&lt;</code></td><td>Redirect stdin from a file</td></tr>
               <tr><td><code>&gt;</code></td><td>Redirect stdout, overwriting the file</td></tr>
               <tr><td><code>&gt;&gt;</code></td><td>Redirect stdout, appending to the file</td></tr>
+              <tr><td><code>2&gt;&amp;1</code></td><td>Merge stderr into captured stdout when piping or redirecting</td></tr>
             </tbody>
           </table>
         </div>
@@ -240,10 +241,11 @@
   <div class="container">
     <p class="section-label">Installation</p>
     <h2 class="section-title">Get up and running</h2>
-    <p class="section-desc">Pre-built packages for Linux, or build from source in seconds.</p>
+    <p class="section-desc">Latest release <strong>v1.2.0</strong> — pre-built packages for 64-bit Linux, or build from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
 
     <div class="install-tabs">
       <button class="tab-btn active" onclick="showTab(event, 'tab-deb')">Debian / Ubuntu</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-rpm')">Fedora / RHEL</button>
       <button class="tab-btn" onclick="showTab(event, 'tab-bin')">Binary</button>
       <button class="tab-btn" onclick="showTab(event, 'tab-src')">From Source</button>
     </div>
@@ -255,15 +257,25 @@
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Download the latest .deb package from the releases page</span>
-wget https://github.com/vlshcc/vlsh/releases/latest/download/vlsh_linux_amd64.deb
+        <pre><span class="c"># .deb for v1.2.0 (installs to /usr/bin/vlsh; postinst updates /etc/shells)</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh_1.2.0_amd64.deb
+sudo dpkg -i vlsh_1.2.0_amd64.deb
 
-<span class="c"># Install</span>
-sudo dpkg -i vlsh_linux_amd64.deb
+<span class="c"># Set as login shell (optional)</span>
+chsh -s /usr/bin/vlsh</pre>
+      </div>
+    </div>
 
-<span class="c"># Add to valid login shells and set as default (optional)</span>
-echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/vlsh</pre>
+    <!-- Fedora / RHEL -->
+    <div id="tab-rpm" class="tab-pane">
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>shell</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><span class="c"># RPM for v1.2.0</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh-1.2.0-1.x86_64.rpm
+sudo rpm -U vlsh-1.2.0-1.x86_64.rpm</pre>
       </div>
     </div>
 
@@ -274,13 +286,13 @@ chsh -s /usr/local/bin/vlsh</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Download the standalone binary (64-bit Linux)</span>
-wget https://github.com/vlshcc/vlsh/releases/latest/download/vlsh_linux_amd64
-chmod +x vlsh_linux_amd64
-sudo mv vlsh_linux_amd64 /usr/local/bin/vlsh
+        <pre><span class="c"># Standalone 64-bit Linux binary (v1.2.0)</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh_1.2.0_amd64_linux
+chmod +x vlsh_1.2.0_amd64_linux
+sudo mv vlsh_1.2.0_amd64_linux /usr/local/bin/vlsh
 
-<span class="c"># Add to valid login shells and set as default (optional)</span>
-echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
+<span class="c"># Approve shell and set as default (optional)</span>
+echo /usr/local/bin/vlsh | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/vlsh</pre>
       </div>
     </div>
@@ -293,14 +305,13 @@ chsh -s /usr/local/bin/vlsh</pre>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
         <pre><span class="c"># Requires V — https://vlang.io</span>
-git clone https://github.com/vlshcc/vlsh
+git clone https://github.com/vlshcc/vlsh.git
 <span class="kw">cd</span> vlsh
 v <span class="p">.</span>
-sudo mv vlsh /usr/local/bin/vlsh
+./vlsh
 
-<span class="c"># Add to valid login shells and set as default (optional)</span>
-echo <span class="s">"/usr/local/bin/vlsh"</span> | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/vlsh</pre>
+<span class="c"># Or install into PATH: sudo make install  (default PREFIX=/usr/local)</span>
+<span class="c"># make help — targets; make test — suite; make fuzz — stress parsers</span></pre>
       </div>
     </div>
 
@@ -316,28 +327,24 @@ chsh -s /usr/local/bin/vlsh</pre>
     <div class="plugin-grid">
       <div>
         <p class="plugin-desc">
-          The plugin system is the heart of vlsh's hackability. Install community plugins from the remote repository with a single command — plugins are versioned and stored under <code>~/.vlsh/plugins/&lt;name&gt;/&lt;version&gt;/</code>. Plugins can:
+          Plugins install from the official repository into <code>~/.vlsh/plugins/&lt;name&gt;/&lt;version&gt;/</code>; vlsh compiles them on startup. The remote catalogue lives at <a href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">github.com/vlshcc/plugins</a>. Plugins can:
         </p>
         <ul class="plugin-steps">
           <li>
             <span class="step-num">1</span>
-            Register new built-in commands available everywhere in the shell
+            Register commands, prompt lines, and help text for the built-in <code>help</code> command
           </li>
           <li>
             <span class="step-num">2</span>
-            Decorate the prompt — e.g. show the current git branch and commit
+            Run pre/post hooks and <code>output_hook</code> around every command
           </li>
           <li>
             <span class="step-num">3</span>
-            Provide tab-completions for any command or flag
+            Provide tab completions and <code>mux_status</code> text for the multiplexer status bar
           </li>
           <li>
             <span class="step-num">4</span>
-            Run pre/post hooks before and after every command
-          </li>
-          <li>
-            <span class="step-num">5</span>
-            Be installed from the community repo with <code>plugins install</code>
+            Be searched, installed, updated, removed, or purged and re-fetched with <code>plugins reinstall</code>
           </li>
         </ul>
       </div>
@@ -391,7 +398,14 @@ chsh -s /usr/local/bin/vlsh</pre>
             <span class="plugin-avail-name">v_man</span>
             <span class="plugin-avail-tag">command</span>
           </div>
-          <p class="plugin-avail-desc">Browse V standard library docs in the terminal, fetched live from <code>modules.vlang.io</code>.</p>
+          <p class="plugin-avail-desc"><code>vman</code> — V stdlib docs in the terminal from <code>modules.vlang.io</code> (install as <code>v_man</code>).</p>
+        </a>
+        <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
+          <div class="plugin-avail-header">
+            <span class="plugin-avail-name">share</span>
+            <span class="plugin-avail-tag">command</span>
+          </div>
+          <p class="plugin-avail-desc">Upload a file to dpaste.com and print the URL.</p>
         </a>
         <a class="plugin-avail-card" href="https://github.com/vlshcc/plugins" target="_blank" rel="noopener">
           <div class="plugin-avail-header">
@@ -431,6 +445,7 @@ chsh -s /usr/local/bin/vlsh</pre>
             <tr><td><code>plugins enable / disable &lt;name&gt;</code></td><td>Activate or deactivate a plugin without deleting it</td></tr>
             <tr><td><code>plugins enable / disable all</code></td><td>Activate or deactivate all plugins at once</td></tr>
             <tr><td><code>plugins delete &lt;name&gt;</code></td><td>Remove an installed plugin and its entire directory</td></tr>
+            <tr><td><code>plugins reinstall &lt;name&gt;</code></td><td>Remove the local copy and install the latest from the remote repository</td></tr>
           </tbody>
         </table>
       </div>
@@ -451,7 +466,8 @@ chsh -s /usr/local/bin/vlsh</pre>
       <li><a href="https://github.com/vlshcc/vlsh/issues" target="_blank" rel="noopener">Issues</a></li>
       <li><a href="https://vlang.io" target="_blank" rel="noopener">V Language</a></li>
     </ul>
-    <p class="footer-copy">MIT License &mdash; Created by David Satime Wallin. Original work by onyxcode.</p>
+    <p class="footer-copy">MIT License &mdash; Copyright &copy; 2021&ndash;2026 David Satime Wallin. Originally created by <a href="https://github.com/onyxcode/vish" target="_blank" rel="noopener">onyxcode</a>.</p>
+    <p class="footer-disclaimer">I'm using vlsh as my daily shell. That does not mean you should be. It is likely that you will run into bugs when using vlsh.</p>
   </div>
 </footer>
 
