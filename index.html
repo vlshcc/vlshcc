@@ -125,7 +125,7 @@
   <div class="container">
     <p class="section-label">Features</p>
     <h2 class="section-title">Everything you need, nothing you don't</h2>
-    <p class="section-desc">vlsh ships with the fundamentals done right, then gets out of your way.</p>
+    <p class="section-desc">These features describe the current <a href="https://github.com/vlshcc/vlsh" target="_blank" rel="noopener">main branch</a>. Published packages may lag behind source updates.</p>
 
     <div class="features-grid">
 
@@ -138,7 +138,7 @@
       <div class="feature-card">
         <div class="feature-icon">|</div>
         <h3>Pipes, Redirection &amp; Chains</h3>
-        <p>Pipelines (<code>|</code>), file redirection (<code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>), and <code>2&gt;&amp;1</code> when stdout is captured — plus <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code>. Glob expansion (<code>*.v</code>, <code>~/docs/**</code>), tilde expansion, and parameter expansion (<code>$VAR</code>, <code>${…}</code>) with session <code>IFS</code> for word splitting.</p>
+        <p>Concurrent pipelines (<code>|</code>), file redirection (<code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>), and <code>2&gt;&amp;1</code> to merge stderr into stdout — plus <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code>. Glob expansion (<code>*.v</code>, <code>~/docs/**</code>), tilde expansion, and parameter expansion (<code>$VAR</code>, <code>${…}</code>) with session <code>IFS</code> for word splitting.</p>
       </div>
 
       <div class="feature-card">
@@ -173,8 +173,8 @@
 
       <div class="feature-card">
         <div class="feature-icon">&#x1F4DC;</div>
-        <h3>Native .vsh Scripts</h3>
-        <p>Run <code>.vsh</code> V scripts directly without manually compiling them first. Great for automation that needs performance without the ceremony of a full build.</p>
+        <h3>Scripts &amp; Batch Commands</h3>
+        <p>Run shell commands with <code>vlsh -c</code>, read a shell script from a file or stdin, or execute <code>.vsh</code> scripts through V. Batch execution returns the last command’s status and skips the interactive prompt and history.</p>
       </div>
 
       <div class="feature-card">
@@ -209,7 +209,7 @@
               <tr><td><code>&lt;</code></td><td>Redirect stdin from a file</td></tr>
               <tr><td><code>&gt;</code></td><td>Redirect stdout, overwriting the file</td></tr>
               <tr><td><code>&gt;&gt;</code></td><td>Redirect stdout, appending to the file</td></tr>
-              <tr><td><code>2&gt;&amp;1</code></td><td>Merge stderr into captured stdout when piping or redirecting</td></tr>
+              <tr><td><code>2&gt;&amp;1</code></td><td>Send stderr to the same output stream as stdout</td></tr>
             </tbody>
           </table>
         </div>
@@ -233,6 +233,7 @@
         </div>
       </div>
     </div>
+    <p class="section-desc">Pipeline stages stream concurrently, and the last stage determines the exit status. Quoted operators and empty arguments are preserved. Full POSIX field splitting, job control, and descriptor duplication order remain outside the supported subset. See <a href="https://github.com/vlshcc/vlsh/blob/main/docs/testing.md" target="_blank" rel="noopener">testing and stability</a> for regression coverage and native validation limits.</p>
   </div>
 </section>
 
@@ -241,7 +242,7 @@
   <div class="container">
     <p class="section-label">Installation</p>
     <h2 class="section-title">Get up and running</h2>
-    <p class="section-desc">Latest release <strong>v1.2.0</strong> — pre-built packages for 64-bit Linux, or build from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
+    <p class="section-desc">Latest published release <strong>v1.2</strong> (package version <strong>1.2.0</strong>) — a pre-built Debian package and standalone binary for 64-bit Linux. Build the main branch for current stability fixes; RPM packages are built from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
 
     <div class="install-tabs">
       <button class="tab-btn active" onclick="showTab(event, 'tab-deb')">Debian / Ubuntu</button>
@@ -257,8 +258,8 @@
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># .deb for v1.2.0 (installs to /usr/bin/vlsh; postinst updates /etc/shells)</span>
-curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh_1.2.0_amd64.deb
+        <pre><span class="c"># Release v1.2; installs /usr/bin/vlsh and registers it in /etc/shells</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2/vlsh_1.2.0_amd64.deb
 sudo dpkg -i vlsh_1.2.0_amd64.deb
 
 <span class="c"># Set as login shell (optional)</span>
@@ -273,9 +274,11 @@ chsh -s /usr/bin/vlsh</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># RPM for v1.2.0</span>
-curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh-1.2.0-1.x86_64.rpm
-sudo rpm -U vlsh-1.2.0-1.x86_64.rpm</pre>
+        <pre><span class="c"># Requires V and rpmbuild; the published release has no RPM asset</span>
+git clone https://github.com/vlshcc/vlsh.git
+<span class="kw">cd</span> vlsh
+make dist-rpm
+sudo rpm -U builds/vlsh-1.2.0-1.*.rpm</pre>
       </div>
     </div>
 
@@ -286,8 +289,8 @@ sudo rpm -U vlsh-1.2.0-1.x86_64.rpm</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Standalone 64-bit Linux binary (v1.2.0)</span>
-curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.0/vlsh_1.2.0_amd64_linux
+        <pre><span class="c"># Standalone 64-bit Linux binary (release v1.2)</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2/vlsh_1.2.0_amd64_linux
 chmod +x vlsh_1.2.0_amd64_linux
 sudo mv vlsh_1.2.0_amd64_linux /usr/local/bin/vlsh
 
@@ -304,16 +307,37 @@ chsh -s /usr/local/bin/vlsh</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Requires V — https://vlang.io</span>
+        <pre><span class="c"># Requires V and make; CI uses V 0.5.2 — https://vlang.io</span>
 git clone https://github.com/vlshcc/vlsh.git
 <span class="kw">cd</span> vlsh
-v <span class="p">.</span>
+make build
 ./vlsh
 
-<span class="c"># Or install into PATH: sudo make install  (default PREFIX=/usr/local)</span>
-<span class="c"># make help — targets; make test — suite; make fuzz — stress parsers</span></pre>
+<span class="c"># Install the built binary and register /usr/local/bin/vlsh in /etc/shells</span>
+sudo make install
+
+<span class="c"># Optional: set as your login shell</span>
+chsh -s /usr/local/bin/vlsh
+
+<span class="c"># Python 3 is required for the integration tests</span>
+make test
+<span class="c"># Linux: build only a .deb (requires dpkg-deb)</span>
+make dist-deb</pre>
       </div>
     </div>
+
+    <h3 class="subsection-title">Commands and scripts from source</h3>
+    <div class="code-block">
+      <div class="code-block-header">
+        <span>shell</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre>./vlsh -c 'printf hello | cat'
+./vlsh path/to/script
+printf 'echo hello\nfalse\n' | ./vlsh
+./vlsh --version</pre>
+    </div>
+    <p class="section-desc">Batch execution skips startup exports, prompts, history writes, and automatic plugin loading. Existing aliases are read from <code>~/.vlshrc</code>. Scripts execute one line at a time using the documented subset. For a user-local installation, pass <code>REGISTER_SHELL=0</code>; staged installs with <code>DESTDIR</code> also skip shell registration.</p>
 
   </div>
 </section>
