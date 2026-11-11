@@ -138,7 +138,7 @@
       <div class="feature-card">
         <div class="feature-icon">|</div>
         <h3>Pipes, Redirection &amp; Chains</h3>
-        <p>Concurrent pipelines (<code>|</code>), file redirection (<code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>), and <code>2&gt;&amp;1</code> to merge stderr into stdout — plus <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code>. Glob expansion (<code>*.v</code>, <code>~/docs/**</code>), tilde expansion, and parameter expansion (<code>$VAR</code>, <code>${…}</code>) with session <code>IFS</code> for word splitting.</p>
+        <p>Concurrent pipelines (<code>|</code>), ordered file and descriptor redirection (<code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>, <code>2&gt;</code>, <code>2&gt;&amp;1</code>), and command lists with <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code>. Quoted arguments stay intact; unquoted expansion results split on <code>IFS</code> before pathname expansion.</p>
       </div>
 
       <div class="feature-card">
@@ -174,7 +174,7 @@
       <div class="feature-card">
         <div class="feature-icon">&#x1F4DC;</div>
         <h3>Scripts &amp; Batch Commands</h3>
-        <p>Run shell commands with <code>vlsh -c</code>, read a shell script from a file or stdin, or execute <code>.vsh</code> scripts through V. Batch execution returns the last command’s status and skips the interactive prompt and history.</p>
+        <p>Use <code>vlsh -c</code>, a script file, or stdin. Scripts support positional arguments, multiline pipelines, conditional lists, quoted words, and comments. Batch execution returns the last command’s status and skips prompts and history. V scripts (<code>.vsh</code>) run through V.</p>
       </div>
 
       <div class="feature-card">
@@ -206,10 +206,13 @@
               <tr><td><code>&amp;&amp;</code></td><td>Run next command only on success</td></tr>
               <tr><td><code>||</code></td><td>Run next command only on failure</td></tr>
               <tr><td><code>;</code></td><td>Run next command unconditionally</td></tr>
+              <tr><td><code>|</code></td><td>Stream output into the next command concurrently</td></tr>
               <tr><td><code>&lt;</code></td><td>Redirect stdin from a file</td></tr>
               <tr><td><code>&gt;</code></td><td>Redirect stdout, overwriting the file</td></tr>
               <tr><td><code>&gt;&gt;</code></td><td>Redirect stdout, appending to the file</td></tr>
-              <tr><td><code>2&gt;&amp;1</code></td><td>Send stderr to the same output stream as stdout</td></tr>
+              <tr><td><code>2&gt; file</code></td><td>Redirect stderr to a file</td></tr>
+              <tr><td><code>2&gt;&amp;1</code></td><td>Duplicate the current stdout onto stderr</td></tr>
+              <tr><td><code>n&gt;&amp;m</code> / <code>n&gt;&amp;-</code></td><td>Duplicate or close a descriptor (0–9)</td></tr>
             </tbody>
           </table>
         </div>
@@ -223,17 +226,20 @@
               <tr><th>Builtin</th><th>Description</th></tr>
             </thead>
             <tbody>
-              <tr><td><code>export</code> / <code>unset</code></td><td>Set or remove environment variables</td></tr>
+              <tr><td><code>export</code> / <code>unset</code></td><td>Export shell-local variables to child commands, or remove variables</td></tr>
+              <tr><td><code>:</code></td><td>Expand arguments and apply redirections, then return success</td></tr>
+              <tr><td><code>set --</code> / <code>shift</code></td><td>Replace or remove positional parameters</td></tr>
               <tr><td><code>source</code> / <code>.</code></td><td>Execute a script in the current shell context</td></tr>
               <tr><td><code>cd</code></td><td>Change directory; supports <code>~</code>, <code>$HOME</code>, and <code>cd -</code></td></tr>
-              <tr><td><code>exit</code></td><td>Exit the shell with an optional status code</td></tr>
-              <tr><td><code>$?</code></td><td>Expands to the exit status of the last command</td></tr>
+              <tr><td><code>exit</code></td><td>Exit with an optional status code; defaults to the last status</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    <p class="section-desc">Pipeline stages stream concurrently, and the last stage determines the exit status. Quoted operators and empty arguments are preserved. Full POSIX field splitting, job control, and descriptor duplication order remain outside the supported subset. See <a href="https://github.com/vlshcc/vlsh/blob/main/docs/testing.md" target="_blank" rel="noopener">testing and stability</a> for regression coverage and native validation limits.</p>
+    <p class="section-desc">Redirections apply from left to right for builtins and external commands: <code>cmd &gt; log 2&gt;&amp;1</code> sends both streams to the file, while <code>cmd 2&gt;&amp;1 &gt; log</code> keeps stderr on the original stdout. Pipeline stages stream concurrently, the final stage determines the status, and core builtins and expansion side effects stay isolated to their stage.</p>
+    <p class="section-desc"><code>NAME=value</code> stays local until <code>export NAME</code>. Unquoted expansions split on <code>IFS</code>; empty <code>IFS</code> disables splitting. Scripts receive <code>$0</code>, numbered parameters, <code>$#</code>, and <code>"$@"</code>. <code>$?</code> holds the last status; missing commands return 127, and commands found but not executable return 126.</p>
+    <p class="section-desc">Command substitution, arithmetic expansion, loops, functions, subshells, here-documents, and background jobs remain unsupported. See <a href="https://github.com/vlshcc/vlsh/blob/main/docs/testing.md" target="_blank" rel="noopener">testing and stability</a> for regression coverage and native validation limits.</p>
   </div>
 </section>
 
@@ -242,7 +248,7 @@
   <div class="container">
     <p class="section-label">Installation</p>
     <h2 class="section-title">Get up and running</h2>
-    <p class="section-desc">Latest published release <strong>v1.2</strong> (package version <strong>1.2.0</strong>) — a pre-built Debian package and standalone binary for 64-bit Linux. Build the main branch for current stability fixes; RPM packages are built from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
+    <p class="section-desc">Latest published release <strong>v1.2</strong> (package version <strong>1.2.0</strong>) — a pre-built Debian package and standalone binary for 64-bit Linux. Build the main branch for current POSIX and stability improvements; RPM packages are built from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
 
     <div class="install-tabs">
       <button class="tab-btn active" onclick="showTab(event, 'tab-deb')">Debian / Ubuntu</button>
@@ -333,11 +339,13 @@ make dist-deb</pre>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
       <pre>./vlsh -c 'printf hello | cat'
-./vlsh path/to/script
+./vlsh path/to/script 'one two'
+./vlsh -c 'printf &quot;&lt;%s&gt;\n&quot; &quot;$@&quot;' name 'one two' ''
 printf 'echo hello\nfalse\n' | ./vlsh
+./vlsh -c 'help syntax'
 ./vlsh --version</pre>
     </div>
-    <p class="section-desc">Batch execution skips startup exports, prompts, history writes, and automatic plugin loading. Existing aliases are read from <code>~/.vlshrc</code>. Scripts execute one line at a time using the documented subset. For a user-local installation, pass <code>REGISTER_SHELL=0</code>; staged installs with <code>DESTDIR</code> also skip shell registration.</p>
+    <p class="section-desc">Batch execution skips startup exports, prompts, history writes, and automatic plugin loading. Existing aliases are read from <code>~/.vlshrc</code>. Scripts use the command parser for multiline pipelines, conditional lists, quoted words, and comments. The built-in <code>help</code>, <code>help syntax</code>, <code>help set</code>, and <code>help export</code> describe the supported behavior. For a user-local installation, pass <code>REGISTER_SHELL=0</code>; staged installs with <code>DESTDIR</code> also skip shell registration.</p>
 
   </div>
 </section>
