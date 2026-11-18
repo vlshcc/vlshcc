@@ -22,16 +22,16 @@ Keep the feature and installation copy aligned with the shell's
 [changelog](https://github.com/vlshcc/vlsh/blob/main/CHANGELOG.md).
 
 Verify download links against the actual GitHub release assets. The current
-published tag is `v1.2`, while its package version is `1.2.0`; it includes the Linux
-`.deb` and standalone binary, plus FreeBSD and DragonFly binaries, and has no RPM
-asset. Source instructions target `main` and may include changes absent from the
-published packages. Do not label source updates as a new release until it exists.
+published tag and package version are `v1.2.1` and `1.2.1`. The release includes
+Linux `.deb` and `.rpm` packages, a standalone Linux binary, cross-compiled
+FreeBSD and DragonFly binaries, and `SHA256SUMS`. Keep installation examples
+aligned with these exact asset names.
 
-The current `main` copy includes the first POSIX compatibility milestone:
-ordered builtin/external redirections, shell-local variables and export tracking,
-field splitting after expansion, positional parameters, multiline simple-command
-lists, and command lookup statuses 126/127. These are source features; they do not
-change the version or contents of the existing `v1.2` release.
+Release v1.2.1 includes ordered builtin/external redirections, shell-local
+variables and export tracking, field splitting after expansion, positional
+parameters, multiline simple-command lists, command lookup statuses 126/127,
+and interactive backslash continuations. Continued commands are recalled and
+saved as one history entry; Ctrl+C cancels the whole command.
 
 Keep the remaining grammar gaps visible: command substitution, arithmetic,
 compound commands, functions, subshells, here-documents, and background jobs.

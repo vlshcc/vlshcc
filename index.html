@@ -125,7 +125,7 @@
   <div class="container">
     <p class="section-label">Features</p>
     <h2 class="section-title">Everything you need, nothing you don't</h2>
-    <p class="section-desc">These features describe the current <a href="https://github.com/vlshcc/vlsh" target="_blank" rel="noopener">main branch</a>. Published packages may lag behind source updates.</p>
+    <p class="section-desc">These features are included in <a href="https://github.com/vlshcc/vlsh/releases/tag/v1.2.1" target="_blank" rel="noopener">v1.2.1</a>, including the latest POSIX, stability, and interactive line continuation fixes.</p>
 
     <div class="features-grid">
 
@@ -248,7 +248,7 @@
   <div class="container">
     <p class="section-label">Installation</p>
     <h2 class="section-title">Get up and running</h2>
-    <p class="section-desc">Latest published release <strong>v1.2</strong> (package version <strong>1.2.0</strong>) — a pre-built Debian package and standalone binary for 64-bit Linux. Build the main branch for current POSIX and stability improvements; RPM packages are built from source. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
+    <p class="section-desc">Latest published release <a href="https://github.com/vlshcc/vlsh/releases/tag/v1.2.1" target="_blank" rel="noopener"><strong>v1.2.1</strong></a> — Debian and RPM packages and a standalone binary for 64-bit Linux, plus cross-compiled FreeBSD and DragonFly binaries. Includes POSIX and stability improvements and a fix for pasted commands with backslash continuations. Full instructions: <a href="https://github.com/vlshcc/vlsh#install" target="_blank" rel="noopener">README on GitHub</a>.</p>
 
     <div class="install-tabs">
       <button class="tab-btn active" onclick="showTab(event, 'tab-deb')">Debian / Ubuntu</button>
@@ -264,9 +264,9 @@
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Release v1.2; installs /usr/bin/vlsh and registers it in /etc/shells</span>
-curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2/vlsh_1.2.0_amd64.deb
-sudo dpkg -i vlsh_1.2.0_amd64.deb
+        <pre><span class="c"># Release v1.2.1; installs /usr/bin/vlsh and registers it in /etc/shells</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.1/vlsh_1.2.1_amd64.deb
+sudo dpkg -i vlsh_1.2.1_amd64.deb
 
 <span class="c"># Set as login shell (optional)</span>
 chsh -s /usr/bin/vlsh</pre>
@@ -280,11 +280,9 @@ chsh -s /usr/bin/vlsh</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Requires V and rpmbuild; the published release has no RPM asset</span>
-git clone https://github.com/vlshcc/vlsh.git
-<span class="kw">cd</span> vlsh
-make dist-rpm
-sudo rpm -U builds/vlsh-1.2.0-1.*.rpm</pre>
+        <pre><span class="c"># Release v1.2.1; pre-built 64-bit Linux RPM</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.1/vlsh-1.2.1-1.x86_64.rpm
+sudo rpm -U vlsh-1.2.1-1.x86_64.rpm</pre>
       </div>
     </div>
 
@@ -295,10 +293,10 @@ sudo rpm -U builds/vlsh-1.2.0-1.*.rpm</pre>
           <span>shell</span>
           <button class="copy-btn" onclick="copyCode(this)">Copy</button>
         </div>
-        <pre><span class="c"># Standalone 64-bit Linux binary (release v1.2)</span>
-curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2/vlsh_1.2.0_amd64_linux
-chmod +x vlsh_1.2.0_amd64_linux
-sudo mv vlsh_1.2.0_amd64_linux /usr/local/bin/vlsh
+        <pre><span class="c"># Standalone 64-bit Linux binary (release v1.2.1)</span>
+curl -LO https://github.com/vlshcc/vlsh/releases/download/v1.2.1/vlsh_1.2.1_amd64_linux
+chmod +x vlsh_1.2.1_amd64_linux
+sudo mv vlsh_1.2.1_amd64_linux /usr/local/bin/vlsh
 
 <span class="c"># Approve shell and set as default (optional)</span>
 echo /usr/local/bin/vlsh | sudo tee -a /etc/shells
@@ -332,7 +330,7 @@ make dist-deb</pre>
       </div>
     </div>
 
-    <h3 class="subsection-title">Commands and scripts from source</h3>
+    <h3 class="subsection-title">Commands and scripts</h3>
     <div class="code-block">
       <div class="code-block-header">
         <span>shell</span>
@@ -345,7 +343,7 @@ printf 'echo hello\nfalse\n' | ./vlsh
 ./vlsh -c 'help syntax'
 ./vlsh --version</pre>
     </div>
-    <p class="section-desc">Batch execution skips startup exports, prompts, history writes, and automatic plugin loading. Existing aliases are read from <code>~/.vlshrc</code>. Scripts use the command parser for multiline pipelines, conditional lists, quoted words, and comments. The built-in <code>help</code>, <code>help syntax</code>, <code>help set</code>, and <code>help export</code> describe the supported behavior. For a user-local installation, pass <code>REGISTER_SHELL=0</code>; staged installs with <code>DESTDIR</code> also skip shell registration.</p>
+    <p class="section-desc">Batch execution skips startup exports, prompts, history writes, and automatic plugin loading. Existing aliases are read from <code>~/.vlshrc</code>. Scripts use the command parser for multiline pipelines, conditional lists, quoted words, and comments. At the interactive prompt, a trailing unescaped backslash shows a <code>&gt; </code> continuation prompt; the joined command executes and is saved as one history entry. Ctrl+C cancels the whole command. The built-in <code>help</code>, <code>help syntax</code>, <code>help set</code>, and <code>help export</code> describe the supported behavior. For a user-local installation, pass <code>REGISTER_SHELL=0</code>; staged installs with <code>DESTDIR</code> also skip shell registration.</p>
 
   </div>
 </section>
